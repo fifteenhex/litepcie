@@ -1033,7 +1033,7 @@ static int litepcie_pci_probe(struct pci_dev *dev, const struct pci_device_id *i
 	dev_info(&dev->dev, "Version %s\n", fpga_identifier);
 
 	pci_set_master(dev);
-	ret = pci_set_dma_mask(dev, DMA_BIT_MASK(32));
+	ret = dma_set_mask(&dev->dev, DMA_BIT_MASK(32));
 	if (ret) {
 		dev_err(&dev->dev, "Failed to set DMA mask\n");
 		goto fail1;
