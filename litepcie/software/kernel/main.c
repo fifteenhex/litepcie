@@ -1031,6 +1031,13 @@ static int litepcie_pci_probe(struct pci_dev *dev, const struct pci_device_id *i
 	for (i = 0; i < 256; i++)
 		fpga_identifier[i] = litepcie_readl(litepcie_dev, CSR_IDENTIFIER_MEM_BASE + i*4);
 	dev_info(&dev->dev, "Version %s\n", fpga_identifier);
+	{
+		const char fpga_identifer_expected[] = CONFIG_IDENTIFIER;
+		if (strcmp(fpga_identifer_expected, fpga_identifier) != 0) {
+			dev_err(&dev->dev, "Version isn't \"%s\", outdated gateware?\n", fpga_identifer_expected);
+			goto fail1;
+		}
+	}
 
 	pci_set_master(dev);
 	ret = dma_set_mask(&dev->dev, DMA_BIT_MASK(32));
